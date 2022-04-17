@@ -1,0 +1,85 @@
+name = "Xoodyak_TI_first_order"
+description = "Xoodyak with 1st order masking using TI"
+author = ["Shuohang Peng", "Shuying Yin", "Cankun Zhao"]
+url = "https://github.com/ybhphoenix/THU_HWSec_LWC"
+license = "GPL-3.0"
+version = "0.1.0"
+
+[rtl]
+sources = [
+    # "src_rtl/design_pkg.vhd",
+    # "src_rtl/LWC_config.vhd",
+    # "src_rtl/LWC/NIST_LWAPI_pkg.vhd",
+    # "src_rtl/tinyjambu_dp_ops.vhd",
+    # "src_rtl/reg_n.vhd",
+    # "src_rtl/TI_mul_reg.vhd",
+    # "src_rtl/TI_mul.vhd",
+    # "src_rtl/TI_mul_dep.vhd",
+    # "src_rtl/TI_nlfsr_reg_feed.vhd",
+    # "src_rtl/TI_nlfsr.vhd",
+    # "src_rtl/tinyjambu_datapath.vhd",
+    # "src_rtl/tinyjambu_control.vhd",
+    # "src_rtl/CryptoCore.vhd",
+    # "src_rtl/LWC/key_piso.vhd",
+    # "src_rtl/LWC/data_piso.vhd",
+    # "src_rtl/LWC/PreProcessor.vhd",
+    # "src_rtl/LWC/data_sipo.vhd",
+    # "src_rtl/LWC/PostProcessor.vhd",
+    # "src_rtl/LWC/FIFO.vhd",
+    # "src_rtl/tag_verif.vhd",
+    # ## SCA protected version of LWC top
+    # "src_rtl/LWC/LWC_SCA.vhd",
+]
+# includes = []
+top = "LWC_SCA"
+# clock.pin clk"
+# reset.pin = "r= "eset"
+# reset.active_high = true
+# reset.asynchronous = false
+# parameters = { G_GENERIC1 = 123 }
+
+[tb]
+# sources = ["src_tb/LWC_TB_SCA.vhd"]
+# top = "LWC_TB"
+# includes = []
+
+# [tb.parameters]
+# # {file: "xx"} is an extension to specify a string generic/parameter pointing to a relative path:
+# G_FNAME_PDI = { file = "KAT/TinyJAMBU-TI1-v1/pdi_shared_2.txt" }
+# G_FNAME_SDI = { file = "KAT/TinyJAMBU-TI1-v1/sdi_shared_2.txt" }
+# G_FNAME_RDI = { file = "KAT/TinyJAMBU-TI1-v1/rdi.txt" }
+# G_FNAME_DO = { file = "KAT/TinyJAMBU-TI1-v1/do.txt" }
+# G_TEST_MODE = 0 # 1: stall inputs and outputs
+# G_RANTI_STALL = true
+# G_TIMEOUT_CYCLES = 1000
+# G_MAX_FAILURES = 0
+
+[language]
+# vhdl.version = "2008"
+# vhdl.synopsys = false
+# verilog.version = "2001"
+# systemverilog.version = "2009"
+
+[lwc.aead]
+algorithm = "xoodyakv1"
+# key_bits = 128
+# npub_bits = 128
+# tag_bits = 128
+# input_sequence.encrypt = [ "npub", "ad", "pt", "tag" ]
+# input_sequence.decrypt = [ "npub", "ad", "ct", "tag" ]
+
+# [lwc.hash]
+# algorithm = "" ###### (hashing is not supported)
+# digest_bits = 128
+
+[lwc.ports]
+# pdi.bit_width = 32
+pdi.num_shares = 2
+# sdi.bit_width = 32
+sdi.num_shares = 2
+rdi.bit_width = 768
+
+[lwc.sca_protection]
+target = ["timing", "spa", "dpa", "cpa"]
+masking_schemes = ["TI"]
+order = 1

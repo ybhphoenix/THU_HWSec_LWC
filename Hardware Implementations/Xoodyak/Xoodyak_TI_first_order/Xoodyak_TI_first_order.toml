@@ -7,28 +7,23 @@ version = "0.1.0"
 
 [rtl]
 sources = [
-    # "src_rtl/design_pkg.vhd",
-    # "src_rtl/LWC_config.vhd",
-    # "src_rtl/LWC/NIST_LWAPI_pkg.vhd",
-    # "src_rtl/tinyjambu_dp_ops.vhd",
-    # "src_rtl/reg_n.vhd",
-    # "src_rtl/TI_mul_reg.vhd",
-    # "src_rtl/TI_mul.vhd",
-    # "src_rtl/TI_mul_dep.vhd",
-    # "src_rtl/TI_nlfsr_reg_feed.vhd",
-    # "src_rtl/TI_nlfsr.vhd",
-    # "src_rtl/tinyjambu_datapath.vhd",
-    # "src_rtl/tinyjambu_control.vhd",
-    # "src_rtl/CryptoCore.vhd",
-    # "src_rtl/LWC/key_piso.vhd",
-    # "src_rtl/LWC/data_piso.vhd",
-    # "src_rtl/LWC/PreProcessor.vhd",
-    # "src_rtl/LWC/data_sipo.vhd",
-    # "src_rtl/LWC/PostProcessor.vhd",
-    # "src_rtl/LWC/FIFO.vhd",
-    # "src_rtl/tag_verif.vhd",
-    # ## SCA protected version of LWC top
-    # "src_rtl/LWC/LWC_SCA.vhd",
+    "src_rtl/CryptoCore_SCA.vhd",
+    "src_rtl/design_pkg.vhd",
+    "src_rtl/LWC_config_32.vhd",
+    "src_rtl/xoodoo_globals.vhd",
+    "src_rtl/xoodoo_n_rounds_SCA.v",
+    "src_rtl/xoodoo_register_SCA.v",
+    "src_rtl/xoodoo_round_SCA.v",
+    "src_rtl/xoodoo_SCA.v",
+    "src_rtl/LWC/data_piso.vhd",
+    "src_rtl/LWC/data_sipo.vhd",
+    "src_rtl/LWC/FIFO.vhd",
+    "src_rtl/LWC/key_piso.vhd",
+    "src_rtl/LWC/NIST_LWAPI_pkg.vhd",
+    "src_rtl/LWC/PreProcessor.vhd",
+    "src_rtl/LWC/PostProcessor.vhd",
+    ## SCA protected version of LWC top
+    "src_rtl/LWC/LWC_SCA.vhd",
 ]
 # includes = []
 top = "LWC_SCA"
@@ -38,7 +33,7 @@ top = "LWC_SCA"
 # reset.asynchronous = false
 # parameters = { G_GENERIC1 = 123 }
 
-[tb]
+# [tb]
 # sources = ["src_tb/LWC_TB_SCA.vhd"]
 # top = "LWC_TB"
 # includes = []
@@ -55,9 +50,9 @@ top = "LWC_SCA"
 # G_MAX_FAILURES = 0
 
 [language]
-# vhdl.version = "2008"
+vhdl.version = "1993"
 # vhdl.synopsys = false
-# verilog.version = "2001"
+verilog.version = "2001"
 # systemverilog.version = "2009"
 
 [lwc.aead]

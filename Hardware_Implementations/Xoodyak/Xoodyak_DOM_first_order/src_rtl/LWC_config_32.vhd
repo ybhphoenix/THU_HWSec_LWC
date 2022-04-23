@@ -1,7 +1,7 @@
 --===============================================================================================--
---! @file       LWC_config_32.vhd
+--! @file       LWC_config.vhd
 --! 
---! @brief      LWC package configuration
+--! @brief      Template for LWC package configuration (LWC_config)
 --!
 --! @author     Kamyar Mohajerani
 --! @copyright  Copyright (c) 2022 Cryptographic Engineering Research Group
@@ -24,7 +24,6 @@
 --! @note       Make a copy of this file to your source folder.
 --!             The recommended naming for the file is `LWC_config.vhd` (or `LWC_config_XX.vhd`)
 --!
---! @note       Modified by Shuying Yin <yinshuying@mail.tsinghua.edu.cn>
 --===============================================================================================--
 
 package LWC_config is

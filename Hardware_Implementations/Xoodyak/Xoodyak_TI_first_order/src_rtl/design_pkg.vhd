@@ -9,7 +9,6 @@
 --! @note       This code is based on the package for the dummy cipher provided within 
 --!             the Development Package for Hardware Implementations Compliant with 
 --!             the Hardware API for Lightweight Cryptography (https://github.com/GMUCERG/LWC)
---! @note       Modified by Shuying Yin <yinshuying@mail.tsinghua.edu.cn>
 -------------------------------------------------------------------------------------------------
 
 library IEEE;
@@ -20,8 +19,7 @@ package Design_pkg is
     --! This module implements Xoodyak with n = 1, 2, 3, 4, 6, or 12 rounds per clock cycle.
     --! Specify the number of rounds per clock cycle by setting the constant roundsPerCycle to a valid value.
     --! Valid values are: 1, 2, 3, 4, 6, and 12
-    --! constant roundsPerCycle : integer := 3;
-    constant roundsPerCycle : integer := 1;
+    --! constant roundsPerCycle : integer := 1;
 
 --------------------------------------------------------------------------------
 ------------------------- DO NOT CHANGE ANYTHING BELOW -------------------------
@@ -104,8 +102,7 @@ package body Design_pkg is
     constant HASH_VALUE_SIZE : integer := 256; --! Hash value size
     constant CCW             : integer := 32; --vector_of_constants(1); --! bdo/bdi width
     constant CCSW            : integer := 32; --vector_of_constants(2); --! key width
-    --! constant CCRW            : integer := 384; 
-    constant CCRW            : integer := 768;
+    constant CCRW            : integer := 384; 
     constant CCWdiv8         : integer := CCW/8; -- derived from parameters above
 
     --! design parameters specific to the CryptoCore

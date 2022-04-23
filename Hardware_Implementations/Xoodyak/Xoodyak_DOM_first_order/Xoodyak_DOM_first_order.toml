@@ -3,7 +3,7 @@ description = "Xoodyak with 1st order masking using DOM"
 author = ["Shuohang Peng", "Shuying Yin", "Cankun Zhao"]
 url = "https://github.com/ybhphoenix/THU_HWSec_LWC"
 license = "GPL-3.0"
-version = "0.1.0"
+version = "0.1.1"
 
 [rtl]
 sources = [

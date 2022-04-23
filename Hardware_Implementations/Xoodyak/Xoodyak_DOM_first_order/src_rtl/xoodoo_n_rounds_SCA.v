@@ -1,53 +1,21 @@
-/*===========================================================================*\
-           Filename : xoodoo_n_rounds_SCA.v
-             Author : Shuying Yin <yinshuying@mail.tsinghua.edu.cn>
-        Description : N rounds of Xoodoo
-          Called by : xoodoo_SCA
-   Revision History : 2022-04-18, Revision 0.1.0, Shuying Yin
-            License : GNU General Public License v3.0 (GPL-3.0)
-                      For more information please see:
-                      https://spdx.org/licenses/GPL-3.0.html
-\*===========================================================================*/
-
 module xoodoo_n_rounds_SCA
-#(
-    parameter roundPerCycle = 1 
-)
 (
     input           clk            ,
     input           rst            ,
     input  [ 383:0] state_in0      ,
     input  [ 383:0] state_in1      ,
-    input  [ 383:0] rs             ,
+    input  [ 383:0] rdi            ,
+    input           rdi_en         ,
     output [ 383:0] state_out0     ,
     output [ 383:0] state_out1     ,
     input  [  12:0] j_in           ,
     output [  12:0] j_out
 );
- 
-    genvar i;
 
-    wire   [  12:0] j_rc_in [0:(roundPerCycle-1)];
-    wire   [  12:0] j_rc_out[0:(roundPerCycle-1)];
-    wire   [  31:0] rc[0:(roundPerCycle-1)];
-    wire   [ 383:0] xoodoo_state_in0 [0:(roundPerCycle-1)];
-    wire   [ 383:0] xoodoo_state_in1 [0:(roundPerCycle-1)];
-    wire   [ 383:0] xoodoo_state_out0[0:(roundPerCycle-1)];
-    wire   [ 383:0] xoodoo_state_out1[0:(roundPerCycle-1)];
+    wire   [  31:0] rc;
 
-    generate
-    for(i=0;i<roundPerCycle;i=i+1) begin: ALL_ROUNDS
-      assign j_rc_in[i] = (i==0)? j_in : j_rc_out[i-1];
-      assign xoodoo_state_in0[i] = (i==0)? state_in0 : xoodoo_state_out0[i-1];
-      assign xoodoo_state_in1[i] = (i==0)? state_in1 : xoodoo_state_out1[i-1];
-      xoodoo_rconst u_rconst(.clk(clk),.rst(rst),.j_in(j_rc_in[i]),.rc(rc[i]),.j_out(j_rc_out[i]));
-      xoodoo_round_SCA  u_round(.clk(clk),.rst(rst),.in_0(xoodoo_state_in0[i]),.in_1(xoodoo_state_in1[i]),.rs(rs),.rconst(rc[i]),.out_0(xoodoo_state_out0[i]),.out_1(xoodoo_state_out1[i]));
-    end
-    endgenerate
-
-    assign j_out = j_rc_out[roundPerCycle-1];
-    assign state_out0 = xoodoo_state_out0[roundPerCycle-1];
-    assign state_out1 = xoodoo_state_out1[roundPerCycle-1];
+    xoodoo_rconst u_rconst(.clk(clk),.rst(rst),.j_in(j_in),.rc(rc),.j_out(j_out));
+    xoodoo_round_SCA  u_round(.clk(clk),.rst(rst),.in_0(state_in0),.in_1(state_in1),.rdi(rdi),.rdi_en(rdi_en),.rconst(rc),.out_0(state_out0),.out_1(state_out1));
 
 endmodule
 
@@ -81,4 +49,3 @@ module xoodoo_rconst
     end
 
 endmodule
-

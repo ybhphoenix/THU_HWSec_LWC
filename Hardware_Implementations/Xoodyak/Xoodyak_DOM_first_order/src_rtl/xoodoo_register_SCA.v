@@ -1,14 +1,3 @@
-/*===========================================================================*\
-           Filename : xoodoo_register_SCA.v
-             Author : Shuying Yin <yinshuying@mail.tsinghua.edu.cn>
-        Description : Registers for the state of Xoodoo
-          Called by : xoodoo_SCA
-   Revision History : 2022-04-18, Revision 0.1.0, Shuying Yin
-            License : GNU General Public License v3.0 (GPL-3.0)
-                      For more information please see:
-                      https://spdx.org/licenses/GPL-3.0.html
-\*===========================================================================*/
-
 module xoodoo_register_SCA
 (
     input               clk                ,
@@ -21,8 +10,7 @@ module xoodoo_register_SCA
     input  [  32*2-1:0] word_in            ,
     input  [       3:0] word_index_in      ,
     input               word_enable_in     ,
-    input               start_in           ,
-    input               running_in         ,
+    input               reg_en             ,
     input  [      31:0] domain_i           ,
     input               domain_enable_i    ,
     output [  32*2-1:0] word_out
@@ -55,7 +43,7 @@ module xoodoo_register_SCA
                 reg_value1[j] <= 32'b0;
             end
          end
-         else if(start_in | running_in) begin
+         else if(reg_en) begin
             for(j=0;j<12;j=j+1) begin
                 reg_value0[j] <= state_in0[32*j+:32];
                 reg_value1[j] <= state_in1[32*j+:32];

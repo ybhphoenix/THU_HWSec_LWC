@@ -9,7 +9,6 @@
 --! @note       This code is based on the package for the dummy cipher provided within
 --!             the Development Package for Hardware Implementations Compliant with
 --!             the Hardware API for Lightweight Cryptography (https://github.com/GMUCERG/LWC)
---! @note       Modified by Shuying Yin <yinshuying@mail.tsinghua.edu.cn>
 --------------------------------------------------------------------------------
 
 library ieee;
@@ -64,16 +63,15 @@ architecture behavioral of CryptoCore_SCA is
 
     -- Xoodoo permutation
 
-    component  xoodoo_SCA is
-        generic( roundPerCycle : integer  := roundsPerCycle);
+    component  xoodoo_SCA
         port (
             clk_i           : in std_logic;
             rst_i           : in std_logic;
+            n_start_i       : in std_logic;
             start_i         : in std_logic;
             state_valid_o   : out std_logic;
             init_reg        : in std_logic;
-            rs0             : in std_logic_vector(383 downto 0);
-            rs1             : in std_logic_vector(383 downto 0);
+            rdi             : in std_logic_vector(383 downto 0);
             rdi_valid       : in std_logic;
             rdi_ready       : out std_logic;
             word_in         : in std_logic_vector(63 downto 0);
@@ -141,9 +139,7 @@ architecture behavioral of CryptoCore_SCA is
     signal bdi_xor                      : std_logic_vector(CCW - 1 downto 0);
     signal bdi_valid_bytes_s            : std_logic_vector(CCWdiv8 - 1 downto 0);
     signal bdi_pad_loc_s                : std_logic_vector(CCWdiv8 - 1 downto 0);
-    signal rs0_r                        : std_logic_vector(383 downto 0);
-    signal rs0_s                        : std_logic_vector(383 downto 0); 
-    signal rs1_s                        : std_logic_vector(383 downto 0);
+    signal rdi_s                        : std_logic_vector(383 downto 0); 
 
     signal bdo_s                        : std_logic_vector(PDI_SHARES * CCW - 1 downto 0);
     signal bdo_valid_bytes_s            : std_logic_vector(CCWdiv8 - 1 downto 0);
@@ -183,17 +179,14 @@ begin
     -- port map of Xoodoo component
     ----------------------------------------------------------------------------
     i_xoodoo: xoodoo_SCA
-        generic map (
-            roundPerCycle => roundsPerCycle
-        )
-        port map (
+        port map(
             clk_i => clk,
             rst_i => rst,
+            n_start_i => n_xoodoo_start_s,
             start_i => xoodoo_start_s,
             state_valid_o => xoodoo_valid_s,
             init_reg => init_reg_s,
-            rs0 => rs0_s,
-            rs1 => rs1_s,
+            rdi => rdi_s,
             rdi_valid => rdi_valid,
             rdi_ready => rdi_ready,
             word_in => word_in_s,
@@ -213,9 +206,7 @@ begin
     -- little endian
     key_s               <= reverse_byte(key);
     bdi_s               <= reverse_byte(bdi);
-    rs0_r               <= rdi(767 downto 384);
-    rs0_s(383 downto 0) <= reverse_byte(rs0_r);
-    rs1_s(383 downto 0) <= reverse_byte(rdi(383 downto 0));
+    rdi_s               <= reverse_byte(rdi);
     bdi_valid_bytes_s   <= reverse_bit(bdi_valid_bytes);
     bdi_pad_loc_s       <= reverse_bit(bdi_pad_loc);
     key_ready           <= key_ready_s;
@@ -232,8 +223,7 @@ begin
 
     -- key_s               <= key;
     -- bdi_s               <= bdi;
-    -- rs0_s               <= rdi(767 downto 384);
-    -- rs1_s               <= rdi(383 downto 0);
+    -- rdi_s               <= rdi;
     -- bdi_valid_bytes_s   <= bdi_valid_bytes;
     -- bdi_pad_loc_s       <= bdi_pad_loc;
     -- key_ready           <= key_ready_s;

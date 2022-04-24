@@ -6,6 +6,12 @@ All notable changes to this implementation variant **Xoodyak_DOM_first_order** w
 
 - Reduce the cycle counts of Xoodoo permutation from 24 to 12.
 
+## [0.2.0] - 2022-04-24
+
+### Security
+
+- Registers in `xoodoo_round_SCA.v` were put in wrong position in versions 0.1.x, leading to a side-channel leakage, which is fixed in this version.  
+
 ## [0.1.1] - 2022-04-23
 
 ### Fixed

@@ -24,6 +24,7 @@
 --! @note       Make a copy of this file to your source folder.
 --!             The recommended naming for the file is `LWC_config.vhd` (or `LWC_config_XX.vhd`)
 --!
+--! @note       Modified by Shuying Yin <yinshuying@mail.tsinghua.edu.cn>
 --===============================================================================================--
 
 package LWC_config is

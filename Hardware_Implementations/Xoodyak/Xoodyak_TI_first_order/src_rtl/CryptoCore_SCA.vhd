@@ -9,6 +9,7 @@
 --! @note       This code is based on the package for the dummy cipher provided within
 --!             the Development Package for Hardware Implementations Compliant with
 --!             the Hardware API for Lightweight Cryptography (https://github.com/GMUCERG/LWC)
+--! @note       Modified by Shuying Yin <yinshuying@mail.tsinghua.edu.cn>
 --------------------------------------------------------------------------------
 
 library ieee;

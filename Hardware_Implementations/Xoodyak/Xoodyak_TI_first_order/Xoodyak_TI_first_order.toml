@@ -3,7 +3,7 @@ description = "Xoodyak with 1st order masking using TI"
 author = ["Shuohang Peng", "Shuying Yin", "Cankun Zhao"]
 url = "https://github.com/ybhphoenix/THU_HWSec_LWC"
 license = "GPL-3.0"
-version = "0.1.1"
+version = "0.1.2"
 
 [rtl]
 sources = [
@@ -27,10 +27,10 @@ sources = [
 ]
 # includes = []
 top = "LWC_SCA"
-# clock.pin clk"
-# reset.pin = "r= "eset"
-# reset.active_high = true
-# reset.asynchronous = false
+clock.pin = "clk"
+reset.pin = "rst"
+reset.active_high = true
+reset.asynchronous = false
 # parameters = { G_GENERIC1 = 123 }
 
 # [tb]
@@ -63,16 +63,16 @@ algorithm = "xoodyakv1"
 # input_sequence.encrypt = [ "npub", "ad", "pt", "tag" ]
 # input_sequence.decrypt = [ "npub", "ad", "ct", "tag" ]
 
-# [lwc.hash]
-# algorithm = "" ###### (hashing is not supported)
+[lwc.hash]
+algorithm = "xoodyakv1"
 # digest_bits = 128
 
 [lwc.ports]
-# pdi.bit_width = 32
+pdi.bit_width = 32
 pdi.num_shares = 2
-# sdi.bit_width = 32
+sdi.bit_width = 32
 sdi.num_shares = 2
-rdi.bit_width = 768
+rdi.bit_width = 384
 
 [lwc.sca_protection]
 target = ["timing", "spa", "dpa", "cpa"]

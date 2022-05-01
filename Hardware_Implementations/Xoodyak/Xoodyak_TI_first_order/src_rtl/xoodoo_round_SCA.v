@@ -1,3 +1,18 @@
+/*===========================================================================*\
+           Filename : xoodoo_round_SCA.v
+             Author : Shuying Yin <yinshuying@mail.tsinghua.edu.cn>
+        Description : One round of Xoodoo
+          Called by : xoodoo_n_rounds_SCA
+   Revision History : 2022-04-18, Revision 0.1.0, Shuying Yin
+                      2022-04-23, Revision 0.1.1, Shuying Yin
+                        Change the port width of rdi from 768 bits to 384 bits.
+                        Reuse regs s0, D0, D1 to store rdi.
+                        Add rdi0_en & rdi1_en to fix the handshake of rdi.
+            License : GNU General Public License v3.0 (GPL-3.0)
+                      For more information please see:
+                      https://spdx.org/licenses/GPL-3.0.html
+\*===========================================================================*/
+
 module xoodoo_round_SCA
 (
     input           clk        ,
@@ -44,7 +59,7 @@ module xoodoo_round_SCA
 
     genvar i,j;
 
-    integer k,p,q;
+    integer k,p;
 
     generate
     for(i=0;i<12;i=i+1) begin:L0
@@ -121,10 +136,13 @@ module xoodoo_round_SCA
            s0[j]   <= 32'b0;
            s1[j]   <= 32'b0;
            s2[j]   <= 32'b0;
-        end 
+        end
+        else if(rdi0_en)begin
+           s0[j]   <= rdi_s[j];
+        end
         else if(rdi1_en)begin
-           s0[j]   <= D0[j] ^ rdi_s[j];
-           s1[j]   <= (j==0)? (C0[00] ^ rconst ^ D0[0]) : (C0[j] ^ D0[j]);
+           s0[j]   <= s0[j] ^ rdi_s[j];
+           s1[j]   <= (j==0)? (C0[00] ^ rconst ^ s0[0]) : (C0[j] ^ s0[j]);
            s2[j]   <= C1[j] ^ rdi_s[j];
         end
       end
@@ -146,14 +164,10 @@ module xoodoo_round_SCA
            D2[k] <= 32'b0;
          end
       end
-      else if(rdi0_en) begin
-         for(p=0;p<12;p=p+1) begin
-           D0[p] <= rdi_s[p];
-         end
-      end
       else if(rdi1_en) begin
-         for(q=0;q<12;q=q+1) begin
-           D1[q] <= rdi_s[q];
+         for(p=0;p<12;p=p+1) begin
+           D0[p] <= s0[p];
+           D1[p] <= rdi_s[p];
          end
       end
       else if(rdi1_en_r) begin

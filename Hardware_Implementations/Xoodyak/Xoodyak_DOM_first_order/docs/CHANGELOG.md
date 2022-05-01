@@ -2,7 +2,9 @@
 
 All notable changes to this implementation variant **Xoodyak_DOM_first_order** will be documented in this file.
 
-## [Unreleased]
+## [0.2.1] - 2022-04-30
+
+### Changed
 
 - Reduce the cycle counts of Xoodoo permutation from 24 to 12.
 

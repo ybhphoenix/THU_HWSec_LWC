@@ -1,3 +1,18 @@
+/*===========================================================================*\
+           Filename : xoodoo_n_rounds_SCA.v
+             Author : Shuying Yin <yinshuying@mail.tsinghua.edu.cn>
+        Description : N rounds of Xoodoo
+          Called by : xoodoo_SCA
+   Revision History : 2022-04-18, Revision 0.1.0, Shuying Yin
+                      2022-04-23, Revision 0.1.1, Shuying Yin
+                        Change the port width of rdi from 768 bits to 384 bits.
+                        Add rdi0_en & rdi1_en to fix the handshake of rdi.
+                        Remove parameter roundsPerCycle.
+            License : GNU General Public License v3.0 (GPL-3.0)
+                      For more information please see:
+                      https://spdx.org/licenses/GPL-3.0.html
+\*===========================================================================*/
+
 module xoodoo_n_rounds_SCA
 (
     input           clk            ,

@@ -1,3 +1,18 @@
+/*===========================================================================*\
+           Filename : xoodoo_round_SCA.v
+             Author : Shuying Yin <yinshuying@mail.tsinghua.edu.cn>
+        Description : One round of Xoodoo
+          Called by : xoodoo_n_rounds_SCA
+   Revision History : 2022-04-18, Revision 0.1.0, Shuying Yin
+                      2022-04-23, Revision 0.1.1, Shuying Yin
+                        Add signal rdi_en for rdi handshake.
+                      2022-04-24, Revision 0.2.0, Cankun Zhao
+                        Correct the position of registers.
+            License : GNU General Public License v3.0 (GPL-3.0)
+                      For more information please see:
+                      https://spdx.org/licenses/GPL-3.0.html
+\*===========================================================================*/
+
 module xoodoo_round_SCA
 (
     input           clk        ,

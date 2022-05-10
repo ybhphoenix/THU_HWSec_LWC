@@ -1,6 +1,6 @@
 name = "Xoodyak_TI_first_order"
 description = "Xoodyak with 1st order masking using TI"
-author = ["Shuohang Peng", "Shuying Yin", "Cankun Zhao"]
+author = ["Shuohang Peng", "Shuying Yin", "Cankun Zhao", "Hang Zhao"]
 url = "https://github.com/ybhphoenix/THU_HWSec_LWC"
 license = "GPL-3.0"
 version = "0.1.2"

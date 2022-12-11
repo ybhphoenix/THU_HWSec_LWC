@@ -9,7 +9,7 @@ https://csrc.nist.gov/Projects/lightweight-cryptography/finalists
 */
 
 #include "api.h"
-#include "Xoodyak.h"
+#include "xoocycle.h"
 #include "ShareOp.h" 
 #include "storerand.h"
 
@@ -22,8 +22,9 @@ https://csrc.nist.gov/Projects/lightweight-cryptography/finalists
 
 #define    TAGLEN        16
 
-#define CRYPTO_KEYWORDS 4
-#define CRYPTO_NPUBWORDS 4
+#define CRYPTO_KEYWORDS 4  //4
+#define CRYPTO_NPUBWORDS 4  //4
+
 
 int crypto_aead_encrypt_shared(
     mask_c_uint32_t * cs , unsigned long long * clen ,
@@ -33,15 +34,20 @@ int crypto_aead_encrypt_shared(
     mask_key_uint32_t * ks
 )
 {
-    Xoodyak_Instance    instance0;
-    Xoodyak_Instance    instance1;
+    xoocycle   instance0;
+    xoocycle    instance1;
+
+    unsigned char empty[1] = {0};
 
     unsigned char m1[NUM_BYTES_M], m0[NUM_BYTES_M];
     unsigned char c1[NUM_BYTES_C], c0[NUM_BYTES_C];
     unsigned char ad1[NUM_BYTES_AD], ad0[NUM_BYTES_AD];
     unsigned char k1[CRYPTO_KEYBYTES], k0[CRYPTO_KEYBYTES];
     unsigned char npub1[CRYPTO_NPUBBYTES], npub0[CRYPTO_NPUBBYTES];
-    //uint32_t i;
+    unsigned char tmp[TAGLEN] = {0};
+    
+    uint32_t i;
+    uint32_t tmpw[4] = {0};
     uint32_t m_wlen = (mlen * 8) / 32;
     uint32_t ad_wlen = (adlen * 8) / 32;
     uint32_t c_wlen, c_blen;
@@ -68,123 +74,30 @@ int crypto_aead_encrypt_shared(
     mask_wordstobytes_npub(npub0, CRYPTO_NPUBBYTES, npubs, 0, CRYPTO_NPUBWORDS);
     mask_wordstobytes_npub(npub1, CRYPTO_NPUBBYTES, npubs, 1, CRYPTO_NPUBWORDS);
 
-    // (void)nsec;
 
-    Xoodyak_Initialize(&instance1, &instance0, k1, k0, CRYPTO_KEYBYTES, npub1, npub0, CRYPTO_NPUBBYTES, NULL, 0);
-    Xoodyak_Absorb(&instance1, &instance0, ad1, ad0, (size_t)adlen);
-    Xoodyak_Encrypt(&instance1, &instance0, m1, m0, c1, c0, (size_t)mlen);
-    Xoodyak_Squeeze(&instance1, &instance0, c1 + mlen, c0 + mlen, TAGLEN);
-	
-//	USART_SendData(USART1, '4');  
-//		while(USART_GetFlagStatus(USART1,USART_FLAG_TC)==RESET);
+    xoocycle_cyclist(&instance1, &instance0, k1, k0, CRYPTO_KEYBYTES, npub1, npub0, CRYPTO_NPUBBYTES, empty, 0);
+    xoocycle_absorb(&instance1, &instance0, ad1, ad0, (size_t)adlen);
+    xoocycle_encrypt(&instance1, &instance0, m1, m0, (size_t)mlen);
+    xoocycle_squeeze(&instance1, &instance0, c1, c0, TAGLEN);
     
-    *clen = mlen + TAGLEN;
+    
+    
+//     xoocycle_erase(&instance1, &instance0);
 
-    c_blen = *clen;
-    c_wlen = (c_blen * 8) / 32;
-    if (((c_blen * 8) % 32) > 0)
-    {
-        c_wlen++;
-    }
+// if you want to check the output 
+    *clen = TAGLEN;
 
+	 c_blen = *clen;
+	c_wlen = (c_blen * 8) / 32;
+	if (((c_blen * 8) % 32) > 0)
+	{
+		 c_wlen++;
+	}
+    
     mask_bytestowords_c(cs, 0, c_wlen, c0);
     mask_bytestowords_c(cs, 1, c_wlen, c1);
 
     
-    
-    #if 0
-    {
-        unsigned int i;
-        for (i = 0; i < *clen; ++i )
-        {
-            printf("\\x%02x", c[i] );
-        }
-        printf("\n");
-    }
-    #endif
-    return 0;
-}
-
-int crypto_aead_decrypt_shared (
-    mask_m_uint32_t * ms , unsigned long long * mlen ,
-    mask_c_uint32_t * cs , unsigned long long clen ,
-    mask_ad_uint32_t * ads , unsigned long long adlen ,
-    mask_npub_uint32_t * npubs ,
-    mask_key_uint32_t * ks
-)
-{
-    Xoodyak_Instance    instance0;
-    Xoodyak_Instance    instance1;
-    unsigned char       tag1[TAGLEN], tag0[TAGLEN], tag[TAGLEN], TempC[TAGLEN];    
-    unsigned long long  mlen_;
-
-    unsigned char m1[NUM_BYTES_M], m0[NUM_BYTES_M];
-    unsigned char c1[NUM_BYTES_M], c0[NUM_BYTES_M];
-    unsigned char ad1[NUM_BYTES_AD], ad0[NUM_BYTES_AD];
-    unsigned char k1[CRYPTO_KEYBYTES], k0[CRYPTO_KEYBYTES];
-    unsigned char npub1[CRYPTO_NPUBBYTES], npub0[CRYPTO_NPUBBYTES];
-    uint32_t c_wlen = (clen * 8) / 32;
-    uint32_t ad_wlen = (adlen * 8) / 32;
-    uint32_t m_wlen, m_blen;
-    uint32_t i;
-
-
-    if(((clen * 8) % 32) > 0)
-	{
-		c_wlen++;
-	}
-	if(((adlen * 8) % 32) > 0)
-	{
-		ad_wlen++;
-	}
-
-    mask_wordstobytes_c(c0, clen, cs, 0, c_wlen);
-    mask_wordstobytes_c(c1, clen, cs, 1, c_wlen);
-
-    mask_wordstobytes_ad(ad0, adlen, ads, 0, ad_wlen);
-    mask_wordstobytes_ad(ad1, adlen, ads, 1, ad_wlen);
-
-    mask_wordstobytes_key(k0, CRYPTO_KEYBYTES, ks, 0, CRYPTO_KEYWORDS);
-    mask_wordstobytes_key(k1, CRYPTO_KEYBYTES, ks, 1, CRYPTO_KEYWORDS);
-
-    mask_wordstobytes_npub(npub0, CRYPTO_NPUBBYTES, npubs, 0, CRYPTO_NPUBWORDS);
-    mask_wordstobytes_npub(npub1, CRYPTO_NPUBBYTES, npubs, 1, CRYPTO_NPUBWORDS);
-
-    // (void)nsec;
-
-    *mlen = 0;
-    if (clen < TAGLEN) {
-        return -1;
-    }
-    mlen_ = clen - TAGLEN;
-    Xoodyak_Initialize(&instance1, &instance0, k1, k0, CRYPTO_KEYBYTES, npub1, npub0, CRYPTO_NPUBBYTES, NULL, 0);
-    Xoodyak_Absorb(&instance1, &instance0, ad1, ad0, (size_t)adlen);
-    Xoodyak_Decrypt(&instance1, &instance0, c1, c0, m1, m0, (size_t)mlen_);
-    Xoodyak_Squeeze(&instance1, &instance0, tag1, tag0, TAGLEN);
-
-    for ( i = 0; i < TAGLEN; i++)
-    {
-        tag[i] = tag0[i] ^ tag1[i];
-        TempC[i] = (c0+mlen_)[i] ^ (c1+mlen_)[i];
-    }
-
-   
-    if (memcmp(tag, TempC, TAGLEN) != 0) {
-        memset(m0, 0, (size_t)mlen_);
-        memset(m1, 0, (size_t)mlen_);
-        return -1;
-    }
-    *mlen = mlen_;
-
-    m_blen = *mlen;
-    m_wlen = (m_blen * 8) / 32;
-    if (((m_blen * 8) % 32) > 0)
-    {
-        m_wlen++;
-    }
-    mask_bytestowords_m(ms, 0, m_wlen, m0);
-    mask_bytestowords_m(ms, 1, m_wlen, m1);
-
     return 0;
 }
 

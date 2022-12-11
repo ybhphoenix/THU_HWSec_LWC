@@ -11,9 +11,10 @@ https://csrc.nist.gov/Projects/lightweight-cryptography/finalists
 #ifndef _ShareOp_h_
 #define _ShareOp_h_
 
-#include "Xoodoo.h"
 #include "share.h"
 #include <string.h>
+
+#define tXoodooLane uint32_t
 
 void fromWordsToBytes_sel(unsigned char *state, tXoodooLane *stateAsWords, uint32_t wlen)
 {

@@ -1,7 +1,3 @@
-/*
-Implementation by Shuohang Peng 
-*/
-
 #ifndef _ShareOp_h_
 #define _ShareOp_h_
 

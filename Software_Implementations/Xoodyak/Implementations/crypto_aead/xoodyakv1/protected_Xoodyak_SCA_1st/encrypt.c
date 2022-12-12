@@ -1,11 +1,5 @@
 /*
 Implementation by Shuohang Peng 
-
-Thanks for Sean B. Palmer's pioneering implementation of the Xoodyak C code,
-our Xoodyak software protection implementation was adapted from his/her reference code. 
-
-The reference link for the original C code is as follows:
-https://github.com/sbp/xoocycle
 */
 
 #include "api.h"

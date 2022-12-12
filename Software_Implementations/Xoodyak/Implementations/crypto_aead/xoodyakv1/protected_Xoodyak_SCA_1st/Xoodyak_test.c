@@ -1,4 +1,7 @@
-/* Xoodyak code written by sbp */
+/*
+Implementation by Shuohang Peng 
+*/
+
 #include <stdio.h>
 #include <string.h>
 #include "crypto_aead.h" 
